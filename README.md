@@ -2,12 +2,12 @@
 
 
 
-**Information theory course design**
+**Information Theory Course Design**
 
 Course purpose: Using programming languages to implement Huffman, Fano, Shannon coding
 
 
-
+****
 
 A. Coding requirements:
 
@@ -20,7 +20,7 @@ A. Coding requirements:
 Q>=10.
 
 
-
+****
 
 
 B. Programming requirements:
@@ -34,7 +34,7 @@ B. Programming requirements:
 4. Different coding types should show the results of coding, average code length, information entropy and other performance indicators.
 
 
-
+****
 
 
 C. Submission of requirements
