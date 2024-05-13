@@ -73,7 +73,7 @@ def huffman_encode(symbol_probabilities, radix,N):
         temp_prob = np.reshape(prob_matrix, (1, length * length))[0]
         for i in range(length*length):
             symbol_probabilities.append([temp_char[i],temp_prob[i]])
-        print(symbol_probabilities)
+        #print(symbol_probabilities)
 
     elif N==3:
         # initialize
@@ -114,16 +114,16 @@ def Entropy(symbol_probabilities):
         Entropy += prob[1] * np.log2(1 / prob[1])
     return Entropy
 # 调用函数进行编码
-Q = "Hello world"
-N = 2
-R = 2
-symbol_probabilities = [['a', 0.4], ['b', 0.3], ['c', 0.2], ['d', 0.1]]
-huffman_codes = huffman_encode(symbol_probabilities, R,N)
+#Q = "Hello world"
+#N = 2
+#R = 2
+#symbol_probabilities = [['a', 0.4], ['b', 0.3], ['c', 0.2], ['d', 0.1]]
+#huffman_codes = huffman_encode(symbol_probabilities, R,N)
 #Aver_code_length = aver_code_length(symbol_probabilities,huffman_codes)
 # 打印结果
 #if huffman_codes:
-for symbol, code in huffman_codes.items():
-    print(f"Symbol: {symbol}, Code: {code}")
+#for symbol, code in huffman_codes.items():
+#    print(f"Symbol: {symbol}, Code: {code}")
 #print(Aver_code_length)
 
 
