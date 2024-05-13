@@ -9,7 +9,7 @@ symbol_probabilities = [['a', 0.4], ['b', 0.3], ['c', 0.2], ['d', 0.1]]
 #e.g symbol='aaaabbbccd'
 # 如果N=1 发送'a' 'a' 'a' 'a' 'b' 'b' 'b' 'c' 'c' 'd'，对应a,b,c,d的probability
 # 如果N=2 发送'aa' 'aa' 'bb' 'bc' 'cd'，对应aa,bb,bc,cd的probability
-N = 1
+N = 2
 #进制 Radix
 R = 2
 #Encoding_Info = H.Huffman_Coding(Symbols,N,R)
