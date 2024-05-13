@@ -13,5 +13,5 @@ N = 1
 #进制 Radix
 R = 2
 #Encoding_Info = H.Huffman_Coding(Symbols,N,R)
-Encoding_Info = S.huffman_encode(symbol_probabilities,R)
+Encoding_Info = H.huffman_encode(symbol_probabilities,R,N)
 print(Encoding_Info)
