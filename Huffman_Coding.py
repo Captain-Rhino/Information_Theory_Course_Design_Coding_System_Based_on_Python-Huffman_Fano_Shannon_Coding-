@@ -39,8 +39,6 @@ def generate_huffman_codes(root, code="", codes=None):
 
     return codes
 
-
-
 def huffman_encode(symbol_probabilities, radix,N):
     #判断radix值是否在[2,5]范围内
     if radix>5 or radix<2:
