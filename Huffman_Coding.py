@@ -42,12 +42,47 @@ def generate_huffman_codes(root, code="", codes=None):
 
 
 def huffman_encode(symbol_probabilities, radix,N):
+    #判断radix值是否在[2,5]范围内
+    if radix>5 or radix<2:
+        text = 'R value is INVALID,please try again'
+        return text
+
+    symbol_probabilities = N_probabilities(symbol_probabilities,N)
+    root = build_huffman_tree(symbol_probabilities, radix,N)
+    huffman_codes = generate_huffman_codes(root)
+
+    return huffman_codes
+#calculate average code length
+def aver_code_length(symbol_probabilities, radix,N):
+    huffman_encodes = huffman_encode(symbol_probabilities,radix,N)
+    symbol_probabilities = N_probabilities(symbol_probabilities,N)
+    Ave_length = 0                                      #Attention!!!
+    for symbol, code in huffman_encodes.items():
+        #对每一个huffman编码，便历symbol_probabilities
+        for i in range(len(symbol_probabilities)):          #正确的前提是，Huffman编码必须正确，也就是传给build_Huffman_tree
+            if symbol_probabilities[i][0] == symbol:            #概率symbol_probabitilies必须是降序排列
+                Ave_length += symbol_probabilities[i][1] * len(code)
+                #print(Ave_length)
+    return Ave_length
+
+#calculate info_entropy
+def Entropy(symbol_probabilities,N):              #这里仅仅与symbol_probabilities有关
+    Entropy = 0                                 # 内容不会出错，与排列顺序无关，一定是正确的
+    symbol_probabilities = N_probabilities(symbol_probabilities,N)
+    for prob in symbol_probabilities:
+        Entropy += prob[1] * np.log2(1 / prob[1])
+    return Entropy
+
+#process symbol_probabilities
+def N_probabilities(symbol_probabilities,N):
     #处理N重序列信源编码
     if N == 1:
         symbol_probabilities = symbol_probabilities
+        return symbol_probabilities
     elif N==2:
         #initialize
         length = len(symbol_probabilities)
+        length_2 = length**2
         char_single =[]
         char_matrix = [[0]*length for _ in range(length)]
         prob_matrix = []
@@ -69,61 +104,69 @@ def huffman_encode(symbol_probabilities, radix,N):
 
         #mix and send to def:build_huffman_tree
         symbol_probabilities=[]
-        temp_char = np.reshape(char_matrix,(1,length*length))[0]
-        temp_prob = np.reshape(prob_matrix, (1, length * length))[0]
-        for i in range(length*length):
+        temp_char = np.reshape(char_matrix,(1,length_2))[0]
+        temp_prob = np.reshape(prob_matrix, (1, length_2))[0]
+        for i in range(length_2):
             symbol_probabilities.append([temp_char[i],temp_prob[i]])
-        #print(symbol_probabilities)
+        symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
+        return symbol_probabilities
 
     elif N==3:
         # initialize
         length = len(symbol_probabilities)
+        length_3 = length**3
         char_single = []
-        char_matrix = [[0] * length for _ in range(length)]
+        char_matrix = [[[0] * length for _ in range(length)] for _ in range(length)]
         prob_matrix = []
         for i in range(length):
             prob_matrix.append(symbol_probabilities[i][1])
         matrix_P1 = np.array(prob_matrix)  # 1*N matrix
         matrix_P2 = np.reshape(matrix_P1, (len(matrix_P1), 1))  # N*1 matrix
-        prob_matrix = np.outer(matrix_P2, matrix_P1)
+        temp_Prob = np.outer(matrix_P2, matrix_P1)
+        prob_matrix = np.outer(matrix_P1,temp_Prob)#计算外积
+        #prob_matrix = np.reshape(prob_matrix,(1,length_3))[0]
+        #print(matrix_P1,'\n',prob_matrix)
 
+        #processing char
+        for i in range(length):
+            char_single.append(symbol_probabilities[i][0])
+        for i in range(len(char_matrix)):
+            for j in range(length):
+                for k in range(length):
+                    char_matrix[i][j][k]=char_single[i]+char_single[j]+char_single[k]
+        #print(char_matrix)
+
+        # mix and send to def:build_huffman_tree
+        symbol_probabilities = []
+        temp_char = np.reshape(char_matrix, (1, length_3))[0]
+        temp_prob = np.reshape(prob_matrix, (1, length_3))[0]
+        for i in range(length_3):
+            symbol_probabilities.append([temp_char[i],temp_prob[i]])
+        symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
+        #print(temp_char,'\n',temp_prob)
+        return symbol_probabilities
     else:
-        print('N value is INVALID,please try again')
-        return 0
+        text = 'N value is INVALID,please try again'
+        return text
 
-    root = build_huffman_tree(symbol_probabilities, radix,N)
-    huffman_codes = generate_huffman_codes(root)
-    Ave_length = aver_code_length(symbol_probabilities,huffman_codes)
-    Info_entropy = Entropy(symbol_probabilities)
-    Ave_l_lbr = Ave_length * np.log2(radix)
-    print(Ave_length,Info_entropy,"Encoding Efficiency:",Info_entropy/Ave_l_lbr)
-    return huffman_codes
-#calculate average code length
-def aver_code_length(symbol_probabilities, huffman_codes):
-    Ave_length = 0
-    for symbol, code in huffman_codes.items():
-        for i in range(len(symbol_probabilities)):
-            if symbol_probabilities[i][0] == symbol:
-                Ave_length += symbol_probabilities[i][1] * len(code)
-    return Ave_length
-
-#calculate info_entropy
-def Entropy(symbol_probabilities):
-    Entropy = 0
-    for prob in symbol_probabilities:
-        Entropy += prob[1] * np.log2(1 / prob[1])
-    return Entropy
 # 调用函数进行编码
-#Q = "Hello world"
-#N = 2
-#R = 2
-#symbol_probabilities = [['a', 0.4], ['b', 0.3], ['c', 0.2], ['d', 0.1]]
-#huffman_codes = huffman_encode(symbol_probabilities, R,N)
-#Aver_code_length = aver_code_length(symbol_probabilities,huffman_codes)
-# 打印结果
-#if huffman_codes:
-#for symbol, code in huffman_codes.items():
-#    print(f"Symbol: {symbol}, Code: {code}")
-#print(Aver_code_length)
+# Q = "Hello world"
+# N = 2
+# R = 2
+# symbol_probabilities = [['a', 0.4], ['b', 0.3], ['c', 0.2], ['d', 0.1]]
+# huffman_code = huffman_encode(symbol_probabilities,R,N)
+# ave = aver_code_length(symbol_probabilities,R,N)
+# Info_Entropy = Entropy(symbol_probabilities,N)
+# print(huffman_code,'\n',ave,'\n',Info_Entropy)
+
+
+
+# huffman_codes = huffman_encode(symbol_probabilities, R,N)
+# #Aver_code_length = aver_code_length(symbol_probabilities,huffman_codes)
+# # 打印结果
+# if huffman_codes:
+#     for symbol, code in huffman_codes.items():
+#        print(f"Symbol: {symbol}, Code: {code}")
+
 
 
