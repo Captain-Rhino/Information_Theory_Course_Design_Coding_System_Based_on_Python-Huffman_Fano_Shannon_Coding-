@@ -97,7 +97,7 @@ def N_probabilities(symbol_probabilities,N):
         for i in range(len(char_matrix)):
             for j in range(length):
                 char_matrix[i][j]=char_single[i]+char_single[j]
-        #print(char_matrix)
+
 
         #mix and send to def:build_huffman_tree
         symbol_probabilities=[]
