@@ -30,7 +30,6 @@ def build_huffman_tree(probabilities, radix, N):
 def generate_huffman_codes(root, code="", codes=None):
     if codes is None:
         codes = {}
-
     if root.symbol is not None:
         codes[root.symbol] = code
     if root.children:
