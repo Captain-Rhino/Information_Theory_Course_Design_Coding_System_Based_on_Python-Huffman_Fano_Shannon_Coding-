@@ -18,6 +18,7 @@ symbol_probabilities = [[symbol, count / total_symbols] for symbol, count in sym
 symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
 
 
+#这里是Huffman_Encoding
 #Huffman编码需要N和R
 #e.g symbol='aaaabbbccd'
 # 如果N=1 发送'a' 'a' 'a' 'a' 'b' 'b' 'b' 'c' 'c' 'd'，对应a,b,c,d的probability
@@ -48,13 +49,38 @@ for i in pre_coding_symbol:
             Symbols_After_Huffman_Encoding.append(huffman_code)
 print('经过Huffman编码后的信息:',Symbols_After_Huffman_Encoding)
 #2.计算并打印平均码长
-Aver_len = H.aver_code_length(symbol_probabilities,R,N)
-print('平均码长:',Aver_len)
+Aver_len_H = H.aver_code_length(symbol_probabilities,R,N)
+print('平均码长:',Aver_len_H)
 #3.计算并打印信息熵以及编码效率
-Info_Entropy = H.Entropy(symbol_probabilities,N)
-print('N重信源编码后的信息熵:',Info_Entropy)
-Ave_l_lbr = Aver_len * np.log2(R)
-Encoding_Efficiency = Info_Entropy/Ave_l_lbr
-print('编码效率:',Encoding_Efficiency)
+Info_Entropy_H = H.Entropy(symbol_probabilities,N)
+print('N重信源编码后的信息熵:',Info_Entropy_H)
+Ave_l_lbr_H = Aver_len_H * np.log2(R)
+Encoding_Efficiency_H = Info_Entropy_H / Ave_l_lbr_H
+print('编码效率:',Encoding_Efficiency_H)
 
+
+print(symbol_probabilities)
+#这里是Fano_Encoding
+Symbols_After_Fano_Encoding = []
+Fano_table = F.fano_encode(symbol_probabilities)#这里输入的symbol_prob...务必按照从大到小排序
+print('\nFano编码表:\n',Fano_table)
+
+#1.对照Fano码表编码，打印编码后的Symbols
+for i in Symbols:
+    for symbol,fano_code in Fano_table.items():
+        if i==symbol:
+            Symbols_After_Fano_Encoding.append(fano_code)
+print('经过Fano编码后的信息:',Symbols_After_Fano_Encoding)
+
+#2.计算并打印平均码长
+Aver_len_F = F.aver_code_length(symbol_probabilities)
+print('平均码长:',Aver_len_F)
+#3.计算并打印信息熵以及编码效率
+Info_Entropy_F = F.Entropy(symbol_probabilities)
+print('N重信源编码后的信息熵:',Info_Entropy_F)
+Ave_l_lbr_F = Aver_len_F * np.log2(2)
+Encoding_Efficiency_F = Info_Entropy_F/Ave_l_lbr_F
+print('编码效率:',Encoding_Efficiency_F)
+
+#这里是Shannon_Encoding
 
