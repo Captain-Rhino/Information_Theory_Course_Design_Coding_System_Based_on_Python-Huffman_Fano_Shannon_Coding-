@@ -1,72 +1,64 @@
-# 符号数: Q:[8-15] ,进制R:[2-5], 重序列N:[1-3]
-import heapq
-from collections import Counter
+import numpy as np
+import math
+def shannon_encode(symbol_probabilities):
+    shannon_codes={}
+    for i in range(len(symbol_probabilities)):
+        pre_prob = 0
+        prob_i = symbol_probabilities[i][1] #第i个的概率
+        code_len_i = math.ceil(np.log2(1 / symbol_probabilities[i][1]))#第i个的码长
+        for j in range(i):#第i个之前（0 -> i - 1）的前项概率和
+            pre_prob += symbol_probabilities[j][1]
+        bin_i = de2bi(pre_prob)#这里返回去除掉 ’0.‘ 后的二进制数
+
+        shannon_code_i = ''.join(bin_i[0:code_len_i])
+        shannon_codes[symbol_probabilities[i][0]] = shannon_code_i
+        #print(prob_i, code_len_i, pre_prob,bin_i,'    ',shannon_code_i,'\n')
+    return shannon_codes
 
 
-def Huffman_Coding(Q, N, R):
-    # judge Q,R,N is legal
-    if len(Q) >= 8 and len(Q) <= 15 and R >= 2 and R <= 5 and N >= 1 and N <= 3:
-        # state is true
-        # calculate P of every symbol
-        letter_counts = Counter(Q)
+#十进制小数转二进制
+def de2bi(dec):
+    result = []         #result = [‘0.‘]
+    for i in range(30):
+        dec = dec * 2
+        dec_int = int(dec)
+        result.append(str(dec_int))
+        dec = dec - dec_int
+        #if dec == 0:
+            #break
+    return result
 
-        # 计算每个字母出现的概率
-        total_letters = len(Q)
-        huffman_list = []
-        for letter, count in letter_counts.items():
-            letter_and_prob = [letter, count / total_letters]
-            huffman_list.append(letter_and_prob)
-            # letters.append(letter)
-            # probabilities.append(count / total_letters)
-        huffman_list = sorted(huffman_list, key=lambda x: x[1], reverse=True)
-        print(huffman_list)
 
-        # return huffman_list
-    else:
-        State = 'Illegal Input,try again plz'
-        return State
+def aver_code_length(symbol_probabilities):
+    aver_len = 0
+    shannon_code = shannon_encode(symbol_probabilities)
+    for i in symbol_probabilities:
+        for symbol,code in shannon_code.items():
+            if i[0]==symbol:
+                aver_len += i[1]*len(code)
+    return aver_len
 
-    class Node:
-        def __init__(self, symbol, probability):
-            self.symbol = symbol
-            self.probability = probability
-            self.children = []
+#计算信息熵
+def Entropy(symbol_probabilities):
+    entropy = 0
+    for i in symbol_probabilities:
+        entropy += i[1] * np.log2( 1 / i[1] )
+    return entropy
 
-        def __lt__(self, other):
-            return self.probability < other.probability
+# symbol_probabilities = [['e', 0.4], ['n', 0.1], ['w', 0.1], ['b', 0.1], ['v', 0.1], ['r', 0.1], ['y', 0.1]]
+# #
+# shannon_encode(symbol_probabilities)
+# b = aver_code_length(symbol_probabilities)
+# c = Entropy(symbol_probabilities)
+# print(a,'\n',b,'\n',c)
+# # for i in range(len(symbol_probabilities)):
+#     pre_prob = 0
+#     prob_i = symbol_probabilities[i][1]  # 第i个的概率
+#     code_len_i = math.ceil(np.log2(1 / symbol_probabilities[i][1]))  # 第i个的码长
+#     for j in range(i):  # 第i个之前（0 -> i - 1）的前项概率和  ( python特性取不到i )
+#         pre_prob += symbol_probabilities[j][1]
 
-    def build_huffman_tree(probabilities, radix):
-        priority_queue = [Node(symbol, prob) for symbol, prob in probabilities]
-        heapq.heapify(priority_queue)
-
-        while len(priority_queue) > 1:
-            merged_prob = 0
-            merged_children = []
-            for _ in range(min(radix, len(priority_queue))):
-                child = heapq.heappop(priority_queue)
-                merged_prob += child.probability
-                merged_children.append(child)
-            merged_node = Node(None, merged_prob)
-            merged_node.children = merged_children
-            heapq.heappush(priority_queue, merged_node)
-
-        return priority_queue[0]
-
-    def generate_huffman_codes(root, code="", codes=None):
-        if codes is None:
-            codes = {}
-
-        if root.symbol is not None:
-            codes[root.symbol] = code
-        if root.children:
-            for i, child in enumerate(root.children):
-                generate_huffman_codes(child, code + str(i), codes)
-
-        return codes
-
-    def huffman_encode(symbol_probabilities, radix):
-        root = build_huffman_tree(symbol_probabilities, radix)
-        huffman_codes = generate_huffman_codes(root)
-        return huffman_codes
-
-    # 展现 编码的结果，平均码长 、信息熵 等性能指标
+# fano_codes = fano_encode(symbol_probabilities)
+# ave_len = aver_code_length(symbol_probabilities)
+# Info_entropy = Entropy(symbol_probabilities)
+# print("Fano Codes:\n",fano_codes,"Aver_length:\n",ave_len,'\nInfo_Entropy:\n',Info_entropy)

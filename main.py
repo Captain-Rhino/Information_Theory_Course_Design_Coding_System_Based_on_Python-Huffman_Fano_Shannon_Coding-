@@ -57,9 +57,9 @@ print('N重信源编码后的信息熵:',Info_Entropy_H)
 Ave_l_lbr_H = Aver_len_H * np.log2(R)
 Encoding_Efficiency_H = Info_Entropy_H / Ave_l_lbr_H
 print('编码效率:',Encoding_Efficiency_H)
+#---Huffman END---
 
 
-print(symbol_probabilities)
 #这里是Fano_Encoding
 Symbols_After_Fano_Encoding = []
 Fano_table = F.fano_encode(symbol_probabilities)#这里输入的symbol_prob...务必按照从大到小排序
@@ -81,6 +81,29 @@ print('N重信源编码后的信息熵:',Info_Entropy_F)
 Ave_l_lbr_F = Aver_len_F * np.log2(2)
 Encoding_Efficiency_F = Info_Entropy_F/Ave_l_lbr_F
 print('编码效率:',Encoding_Efficiency_F)
+#---Fano END---
+
+
 
 #这里是Shannon_Encoding
+print(symbol_probabilities)
+Symbols_After_Shannon_Encoding = []
+Shannon_table = S.shannon_encode(symbol_probabilities)#这里输入的symbol_prob...务必按照从大到小排序
+print('\nShannon编码表:\n',Shannon_table)
 
+#1.对照Shannon_码表编码，打印编码后的Symbols
+for i in Symbols:
+    for symbol,fano_code in Shannon_table.items():
+        if i==symbol:
+            Symbols_After_Shannon_Encoding.append(fano_code)
+print('经过Shannon编码后的信息:',Symbols_After_Shannon_Encoding)
+
+#2.计算并打印平均码长
+Aver_len_S= S.aver_code_length(symbol_probabilities)
+print('平均码长:',Aver_len_S)
+#3.计算并打印信息熵以及编码效率
+Info_Entropy_S = S.Entropy(symbol_probabilities)
+print('N重信源编码后的信息熵:',Info_Entropy_S)
+Ave_l_lbr_S = Aver_len_S * np.log2(2)
+Encoding_Efficiency_S = Info_Entropy_S/Ave_l_lbr_S
+print('编码效率:',Encoding_Efficiency_S)
