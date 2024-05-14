@@ -3,21 +3,23 @@ import Fano_Coding    as F
 import Shannon_Coding as S
 import numpy as np
 from collections import Counter
-
+def sort_symbol(Symbols):
+    symbol_counts = Counter(Symbols)
+    # 计算总字母数
+    total_symbols = len(Symbols)
+    # 计算每个字母的概率
+    symbol_probabilities = [[symbol, count / total_symbols] for symbol, count in symbol_counts.items()]
+    # 从大到小排序
+    symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
+    return symbol_probabilities
 #任意种编码都需要的操作
 # 符号 symbol
 Symbols = input('Symbols:')
 while len(Symbols)>15 or len(Symbols)<8:
     Symbols = input('Ensure input symbols_length is between 8 and 15(including 8 and 15)')
-symbol_counts = Counter(Symbols)
-# 计算总字母数
-total_symbols = len(Symbols)
-# 计算每个字母的概率
-symbol_probabilities = [[symbol, count / total_symbols] for symbol, count in symbol_counts.items()]
-#从大到小排序
-symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
 
-
+symbol_probabilities = sort_symbol(Symbols)
+total_symbols = len(symbol_probabilities)
 #这里是Huffman_Encoding
 #Huffman编码需要N和R
 #e.g symbol='aaaabbbccd'
