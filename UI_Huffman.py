@@ -135,7 +135,7 @@ class Ui_UI_Huffman(object):
         Encoding_Efficiency_H = Info_Entropy_H / Ave_l_lbr_H
         #print('编码效率:', Encoding_Efficiency_H)
         # 将文本设置到输出框中
-        output_text = f"{'哈夫曼编码表如下：'}\n{Huffman_table}\n\n{'经过Huffman编码后的信息:'}\n{Symbols_After_Huffman_Encoding}" \
+        output_text = f"{'Huffman编码表如下：'}\n{Huffman_table}\n\n{'经过Huffman编码后的信息:'}\n{Symbols_After_Huffman_Encoding}" \
                       f"\n\n{'平均码长:'}\n{Aver_len_H}\n\n{'N重信源编码后的信息熵:'}\n{Info_Entropy_H}\n\n{'编码效率:'}\n{Encoding_Efficiency_H}"
         self.Output_textbrowser.setText(output_text)
         # self.Output_textbrowser.setText(Input_Symbols)
@@ -167,13 +167,3 @@ def sort_symbol(Symbols):
     symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
     return symbol_probabilities
 
-if __name__ == '__main__':
-    import sys
-    from PyQt5.QtWidgets import QApplication, QMainWindow
-    #import pics_ui_rc # 导入添加的资源（根据实际情况填写文件名）
-    app = QApplication(sys.argv)
-    UI_Huffman = QMainWindow()
-    ui = Ui_UI_Huffman()
-    ui.setupUi(UI_Huffman)
-    UI_Huffman.show()
-    sys.exit(app.exec_())
