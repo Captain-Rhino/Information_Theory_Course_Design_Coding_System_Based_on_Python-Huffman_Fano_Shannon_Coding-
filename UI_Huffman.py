@@ -10,7 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_UI_Huffman(object):
     def setupUi(self, UI_Huffman):
         UI_Huffman.setObjectName("UI_Huffman")
@@ -51,6 +50,18 @@ class Ui_UI_Huffman(object):
 
         self.retranslateUi(UI_Huffman)
         QtCore.QMetaObject.connectSlotsByName(UI_Huffman)
+
+        # 返回按钮点下回到start界面
+        self.Back_to_Start_button.clicked.connect(self.backToStart)
+
+    def backToStart(self):
+        from start import Ui_Form
+        self.start_window = QtWidgets.QMainWindow()
+        self.ui = Ui_Form()
+        self.ui.setupUi(self.start_window)
+        self.start_window.show()
+        QtWidgets.QWidget.close(self.Back_to_Start_button.window())
+
 
     def retranslateUi(self, UI_Huffman):
         _translate = QtCore.QCoreApplication.translate

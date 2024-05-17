@@ -40,6 +40,18 @@ class Ui_UI_Fano(object):
         self.retranslateUi(UI_Fano)
         QtCore.QMetaObject.connectSlotsByName(UI_Fano)
 
+        # 返回按钮点下回到start界面
+        self.Back_to_Start_button.clicked.connect(self.backToStart)
+
+    def backToStart(self):
+        from start import Ui_Form
+        self.start_window = QtWidgets.QMainWindow()
+        self.ui = Ui_Form()
+        self.ui.setupUi(self.start_window)
+        self.start_window.show()
+        QtWidgets.QWidget.close(self.Back_to_Start_button.window())
+
+
     def retranslateUi(self, UI_Fano):
         _translate = QtCore.QCoreApplication.translate
         UI_Fano.setWindowTitle(_translate("UI_Fano", "UI_Fano"))

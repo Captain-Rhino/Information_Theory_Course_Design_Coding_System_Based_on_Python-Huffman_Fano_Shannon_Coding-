@@ -40,6 +40,18 @@ class Ui_UI_Shannon(object):
         self.retranslateUi(UI_Shannon)
         QtCore.QMetaObject.connectSlotsByName(UI_Shannon)
 
+        # 返回按钮点下回到start界面
+        self.Back_to_Start_button.clicked.connect(self.backToStart)
+
+    def backToStart(self):
+        from start import Ui_Form
+        self.start_window = QtWidgets.QMainWindow()
+        self.ui = Ui_Form()
+        self.ui.setupUi(self.start_window)
+        self.start_window.show()
+        QtWidgets.QWidget.close(self.Back_to_Start_button.window())
+
+
     def retranslateUi(self, UI_Shannon):
         _translate = QtCore.QCoreApplication.translate
         UI_Shannon.setWindowTitle(_translate("UI_Shannon", "Form"))
