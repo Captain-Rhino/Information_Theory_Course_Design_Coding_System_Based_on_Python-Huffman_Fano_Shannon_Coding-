@@ -61,7 +61,7 @@ class Ui_UI_Huffman(object):
         self.ui.setupUi(self.start_window)
         self.start_window.show()
         QtWidgets.QWidget.close(self.Back_to_Start_button.window())
-#1
+#12
 
     def retranslateUi(self, UI_Huffman):
         _translate = QtCore.QCoreApplication.translate
