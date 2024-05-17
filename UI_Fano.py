@@ -9,7 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from collections import Counter
+import numpy as np
 
 class Ui_UI_Fano(object):
     def setupUi(self, UI_Fano):
@@ -42,6 +43,8 @@ class Ui_UI_Fano(object):
 
         # 返回按钮点下回到start界面
         self.Back_to_Start_button.clicked.connect(self.backToStart)
+        # 生成按钮事件
+        self.Generate_button.clicked.connect(self.display)
 
     def backToStart(self):
         from start import Ui_Form
@@ -51,6 +54,38 @@ class Ui_UI_Fano(object):
         self.start_window.show()
         QtWidgets.QWidget.close(self.Back_to_Start_button.window())
 
+    def display(self):
+        import Fano_Coding as F
+        #检查Symbols输入
+        Input_Symbols = self.Input_Symbol_textedit.toPlainText()
+        if len(Input_Symbols) >= 10:
+            Input_Symbols = Input_Symbols
+        else:
+            self.Output_textbrowser.setText("注意输入符号的长度Q的范围！")
+            return
+
+        #输入检查完毕，开始计算Fano编码以及各项指标
+        symbol_probabilities = sort_symbol(Input_Symbols)
+        #1.Fano码表
+
+        Fano_table = F.fano_encode(symbol_probabilities)
+        #对照Fano码表进行编码
+        Symbols_After_Fano_Encoding = []
+        for i in Input_Symbols:
+            for symbol, fano_code in Fano_table.items():
+                if i == symbol:
+                    Symbols_After_Fano_Encoding.append(fano_code)
+
+        Aver_len_F = F.aver_code_length(symbol_probabilities)
+        # 3.计算并打印信息熵以及编码效率
+        Info_Entropy_F = F.Entropy(symbol_probabilities)
+        Ave_l_lbr_F = Aver_len_F * np.log2(2)
+        Encoding_Efficiency_F = Info_Entropy_F / Ave_l_lbr_F
+
+        # 将文本设置到输出框中
+        output_text = f"{'Fano编码表如下：'}\n{Fano_table}\n\n{'经过Fano编码后的信息:'}\n{Symbols_After_Fano_Encoding}" \
+                      f"\n\n{'平均码长:'}\n{Aver_len_F}\n\n{'信源的信息熵:'}\n{Info_Entropy_F}\n\n{'编码效率:'}\n{Encoding_Efficiency_F}"
+        self.Output_textbrowser.setText(output_text)
 
     def retranslateUi(self, UI_Fano):
         _translate = QtCore.QCoreApplication.translate
@@ -66,13 +101,13 @@ class Ui_UI_Fano(object):
         self.Generate_button.setText(_translate("UI_Fano", "Generate"))
         self.Output_hint.setText(_translate("UI_Fano", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt;\">运行结果</span></p></body></html>"))
 
-if __name__ == '__main__':
-    import sys
-    from PyQt5.QtWidgets import QApplication, QMainWindow
-    #import pics_ui_rc # 导入添加的资源（根据实际情况填写文件名）
-    app = QApplication(sys.argv)
-    UI_Fano = QMainWindow()
-    ui = Ui_UI_Fano()
-    ui.setupUi(UI_Fano)
-    UI_Fano.show()
-    sys.exit(app.exec_())
+def sort_symbol(Symbols):
+    symbol_counts = Counter(Symbols)
+    # 计算总字母数
+    total_symbols = len(Symbols)
+    # 计算每个字母的概率
+    symbol_probabilities = [[symbol, count / total_symbols] for symbol, count in symbol_counts.items()]
+    # 从大到小排序
+    symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
+    return symbol_probabilities
+
