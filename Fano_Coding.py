@@ -1,21 +1,28 @@
 import numpy as np
-def fano_encode(symbol_probabilities, code='', codes={}):
-    if len(symbol_probabilities) == 1:
-        codes[symbol_probabilities[0][0]] = code
-        return codes
-    total_probability = sum(prob for symbol, prob in symbol_probabilities)
-    half_probability = 0
-    min_difference = float('inf')
-    split_index = -1
-    for i, (symbol, prob) in enumerate(symbol_probabilities):
-        half_probability += prob
-        difference = abs(half_probability - total_probability / 2)
-        if difference < min_difference:
-            min_difference = difference
-            split_index = i
-    fano_encode(symbol_probabilities[:split_index + 1], code + '0', codes)
-    fano_encode(symbol_probabilities[split_index + 1:], code + '1', codes)
-    return codes
+
+def fano_encode(symbol_probabilities):
+    def _fano_encode_recursive(symbol_probabilities, code, codes):
+        if len(symbol_probabilities) == 1:
+            codes[symbol_probabilities[0][0]] = code
+            return
+        total_probability = sum(prob for symbol, prob in symbol_probabilities)
+        half_probability = 0
+        min_difference = float('inf')
+        split_index = -1
+        for i, (symbol, prob) in enumerate(symbol_probabilities):
+            half_probability += prob
+            difference = abs(half_probability - total_probability / 2)
+            if difference < min_difference:
+                min_difference = difference
+                split_index = i
+        _fano_encode_recursive(symbol_probabilities[:split_index + 1], code + '0', codes)
+        _fano_encode_recursive(symbol_probabilities[split_index + 1:], code + '1', codes)
+
+    sorted_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
+    fano_codes = {}
+    _fano_encode_recursive(sorted_probabilities, '', fano_codes)
+    return fano_codes
+
 
 #计算平均码长
 def aver_code_length(symbol_probabilities):
