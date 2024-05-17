@@ -114,13 +114,3 @@ def sort_symbol(Symbols):
     symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
     return symbol_probabilities
 
-if __name__ == '__main__':
-    import sys
-    from PyQt5.QtWidgets import QApplication, QMainWindow
-    #import pics_ui_rc # 导入添加的资源（根据实际情况填写文件名）
-    app = QApplication(sys.argv)
-    UI_Shannon = QMainWindow()
-    ui = Ui_UI_Shannon()
-    ui.setupUi(UI_Shannon)
-    UI_Shannon.show()
-    sys.exit(app.exec_())
