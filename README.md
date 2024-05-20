@@ -1,6 +1,7 @@
 ***中文说明见README(zh).md***
 
 
+****The .exe file is in the dist dir****
 
 **Information Theory Course Design**
 
