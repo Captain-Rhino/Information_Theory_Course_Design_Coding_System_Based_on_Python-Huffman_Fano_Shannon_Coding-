@@ -92,7 +92,7 @@ class Ui_UI_Shannon(object):
 
     def retranslateUi(self, UI_Shannon):
         _translate = QtCore.QCoreApplication.translate
-        UI_Shannon.setWindowTitle(_translate("UI_Shannon", "Form"))
+        UI_Shannon.setWindowTitle(_translate("UI_Shannon", "Shannon编码界面"))
         self.TITLE.setText(_translate("UI_Shannon", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt;\">Shannon编码</span></p><p align=\"center\"><span style=\" font-size:16pt;\">任意Q符号信源的二进制编码</span></p><p><br/></p></body></html>"))
         self.Back_to_Start_button.setText(_translate("UI_Shannon", "返回到初始界面"))
         self.Input_Symbol_textedit.setHtml(_translate("UI_Shannon", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

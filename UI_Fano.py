@@ -89,7 +89,7 @@ class Ui_UI_Fano(object):
 
     def retranslateUi(self, UI_Fano):
         _translate = QtCore.QCoreApplication.translate
-        UI_Fano.setWindowTitle(_translate("UI_Fano", "UI_Fano"))
+        UI_Fano.setWindowTitle(_translate("UI_Fano", "Fano编码界面"))
         self.TITLE.setText(_translate("UI_Fano", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt;\">Fano编码</span></p><p align=\"center\"><span style=\" font-size:16pt;\">任意Q符号信源的二进制编码</span></p><p><br/></p></body></html>"))
         self.Back_to_Start_button.setText(_translate("UI_Fano", "返回到初始界面"))
         self.Input_Symbol_textedit.setHtml(_translate("UI_Fano", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
