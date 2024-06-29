@@ -129,7 +129,7 @@ class Ui_UI_Huffman(object):
         Aver_len_H = H.aver_code_length(symbol_probabilities, Input_R, Input_N)
 
         #3.计算并打印信息熵以及编码效率
-        Info_Entropy_H = H.Entropy(symbol_probabilities, Input_N)
+        Info_Entropy_H = H.Entropy(symbol_probabilities, Input_N,Input_R)
         #print('N重信源编码后的信息熵:', Info_Entropy_H)
         Ave_l_lbr_H = Aver_len_H * np.log2(Input_R)
         Encoding_Efficiency_H = Info_Entropy_H / Ave_l_lbr_H

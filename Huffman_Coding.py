@@ -1,4 +1,5 @@
 import heapq
+import math
 import numpy as np #use for matrix and log calculate,矩阵以及对数计算使用
 
 class Node:
@@ -44,7 +45,7 @@ def huffman_encode(symbol_probabilities, radix,N):
         text = 'R value is INVALID,please try again'
         return text
 
-    symbol_probabilities = N_probabilities(symbol_probabilities,N)
+    symbol_probabilities = N_probabilities(symbol_probabilities,N,radix)
     root = build_huffman_tree(symbol_probabilities, radix,N)
     huffman_codes = generate_huffman_codes(root)
 
@@ -52,7 +53,7 @@ def huffman_encode(symbol_probabilities, radix,N):
 #calculate average code length
 def aver_code_length(symbol_probabilities, radix,N):
     huffman_encodes = huffman_encode(symbol_probabilities,radix,N)
-    symbol_probabilities = N_probabilities(symbol_probabilities,N)
+    symbol_probabilities = N_probabilities(symbol_probabilities,N,radix)
     Ave_length = 0                                      #Attention!!!
     for symbol, code in huffman_encodes.items():
         #对每一个huffman编码，便历symbol_probabilities
@@ -63,19 +64,29 @@ def aver_code_length(symbol_probabilities, radix,N):
     return Ave_length
 
 #calculate info_entropy
-def Entropy(symbol_probabilities,N):              #这里仅仅与symbol_probabilities有关
+def Entropy(symbol_probabilities,N,radix):              #这里仅仅与symbol_probabilities有关
     Entropy = 0                                 # 内容不会出错，与排列顺序无关，一定是正确的
-    symbol_probabilities = N_probabilities(symbol_probabilities,N)
+    symbol_probabilities = N_probabilities(symbol_probabilities,N,radix)
     for prob in symbol_probabilities:
-        Entropy += prob[1] * np.log2(1 / prob[1])
+        if prob[1] != 0:
+            Entropy += prob[1] * np.log2(1 / prob[1])
     return Entropy
 
 #process symbol_probabilities
-def N_probabilities(symbol_probabilities,N):
+def N_probabilities(symbol_probabilities,N,radix):
     #处理N重序列信源编码
     if N == 1:
         symbol_probabilities = symbol_probabilities
-        return symbol_probabilities
+        if (len(symbol_probabilities)-radix)%(radix-1)==0:
+            return symbol_probabilities
+        else:   #为了满足符号个数N=Radix+(Radix-1)*m
+            temp = math.ceil((len(symbol_probabilities)-radix)/(radix-1))   #这里计算m，向上取整
+            symbol_new_len = temp * (radix - 1) + radix                     #R进制应满足的新的长度
+            symbol_old_len = len(symbol_probabilities)                      #记录旧的长度
+            for i in range(symbol_new_len - symbol_old_len):
+                symbol_probabilities.append(['pad'+str(i+1),0])
+            #print(symbol_old_len,symbol_new_len)
+            return symbol_probabilities
     elif N==2:
         #initialize
         length = len(symbol_probabilities)
@@ -106,7 +117,18 @@ def N_probabilities(symbol_probabilities,N):
         for i in range(length_2):
             symbol_probabilities.append([temp_char[i],temp_prob[i]])
         symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
-        return symbol_probabilities
+
+        #判定是否满足符号个数 N_symbol = 2 * (Radix -1) + Radix
+        if (len(symbol_probabilities)-radix)%(radix-1)==0:
+            return symbol_probabilities
+        else:
+            temp = math.ceil((len(symbol_probabilities) - radix) / (radix - 1))  # 这里计算m，向上取整
+            symbol_new_len = temp * (radix - 1) + radix  # R进制应满足的新的长度
+            symbol_old_len = len(symbol_probabilities)  # 记录旧的长度
+            for i in range(symbol_new_len - symbol_old_len):
+                symbol_probabilities.append(['pad' + str(i + 1), 0])
+            # print(symbol_old_len,symbol_new_len)
+            return symbol_probabilities
 
     elif N==3:
         # initialize
@@ -141,30 +163,43 @@ def N_probabilities(symbol_probabilities,N):
             symbol_probabilities.append([temp_char[i],temp_prob[i]])
         symbol_probabilities = sorted(symbol_probabilities, key=lambda x: x[1], reverse=True)
         #print(temp_char,'\n',temp_prob)
-        return symbol_probabilities
+
+
+        # 判定是否满足符号个数 N_symbol = 2 * (Radix -1) + Radix
+        if (len(symbol_probabilities) - radix) % (radix - 1) == 0:
+            return symbol_probabilities
+        else:
+            temp = math.ceil((len(symbol_probabilities) - radix) / (radix - 1))  # 这里计算m，向上取整
+            symbol_new_len = temp * (radix - 1) + radix  # R进制应满足的新的长度
+            symbol_old_len = len(symbol_probabilities)  # 记录旧的长度
+            for i in range(symbol_new_len - symbol_old_len):
+                symbol_probabilities.append(['pad' + str(i + 1), 0])
+            # print(symbol_old_len,symbol_new_len)
+            return symbol_probabilities
+
     else:
         text = 'N value is INVALID,please try again'
         return text
 
-# # 调用函数进行编码
-# Q = "Hello world"
-# N = 1
-# R = 3
-# #symbol_probabilities = [['a', 0.4], ['b', 0.3], ['c', 0.2], ['d', 0.08],['e',0.02]]
-# symbol_probabilities = [['a',0.192307692307692],['b',0.0705128205128205],['c',0.0192307692307692],['d',0.0256410256410256],['e',0.0384615384615385],['f',0.0705128205128205],['g',0.00641025641025641],['h',0.0192307692307692],['i',0.0384615384615385],['j',0.0961538461538462],['k',0.0128205128205128],['l',0.0128205128205128],['m',0.0256410256410256],['n',0.0192307692307692],['o',0.0641025641025641],['p',0.0448717948717949],['q',0.0256410256410256],['r',0.0448717948717949],['s',0.0705128205128205],['t',0.0448717948717949],['u',0.0128205128205128],['v',0.0128205128205128],['w',0.00641025641025641],['x',0.0192307692307692],['y',0.00641025641025641]]
-# huffman_code = huffman_encode(symbol_probabilities,R,N)
-# ave = aver_code_length(symbol_probabilities,R,N)
-# Info_Entropy = Entropy(symbol_probabilities,N)
-# print(huffman_code,'\n',ave,'\n',Info_Entropy)
+# 调用函数进行编码
+Q = "Hello world"
+N = 1
+R = 3
+symbol_probabilities = [['a', 0.3076], ['b', 0.2307], ['c', 0.1538], ['d', 0.1538],['e',0.0769],['f',0.0769]]#,['pad1',0]]
+#symbol_probabilities = [['a',0.192307692307692],['b',0.0705128205128205],['c',0.0192307692307692],['d',0.0256410256410256],['e',0.0384615384615385],['f',0.0705128205128205],['g',0.00641025641025641],['h',0.0192307692307692],['i',0.0384615384615385],['j',0.0961538461538462],['k',0.0128205128205128],['l',0.0128205128205128],['m',0.0256410256410256],['n',0.0192307692307692],['o',0.0641025641025641],['p',0.0448717948717949],['q',0.0256410256410256],['r',0.0448717948717949],['s',0.0705128205128205],['t',0.0448717948717949],['u',0.0128205128205128],['v',0.0128205128205128],['w',0.00641025641025641],['x',0.0192307692307692],['y',0.00641025641025641]]
+huffman_code = huffman_encode(symbol_probabilities,R,N)
+ave = aver_code_length(symbol_probabilities,R,N)
+Info_Entropy = Entropy(symbol_probabilities,N,R)
+print(huffman_code,'\n',ave,'\n',Info_Entropy)
 
 
 
-# huffman_codes = huffman_encode(symbol_probabilities, R,N)
-# #Aver_code_length = aver_code_length(symbol_probabilities,huffman_codes)
-# # 打印结果
-# if huffman_codes:
-#     for symbol, code in huffman_codes.items():
-#        print(f"Symbol: {symbol}, Code: {code}")
+huffman_codes = huffman_encode(symbol_probabilities, R,N)
+#Aver_code_length = aver_code_length(symbol_probabilities,huffman_codes)
+# 打印结果
+if huffman_codes:
+    for symbol, code in huffman_codes.items():
+       print(f"Symbol: {symbol}, Code: {code}")
 
 
 
