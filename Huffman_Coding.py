@@ -181,25 +181,25 @@ def N_probabilities(symbol_probabilities,N,radix):
         text = 'N value is INVALID,please try again'
         return text
 
-# 调用函数进行编码
-Q = "Hello world"
-N = 1
-R = 3
-symbol_probabilities = [['a', 0.3076], ['b', 0.2307], ['c', 0.1538], ['d', 0.1538],['e',0.0769],['f',0.0769]]#,['pad1',0]]
-#symbol_probabilities = [['a',0.192307692307692],['b',0.0705128205128205],['c',0.0192307692307692],['d',0.0256410256410256],['e',0.0384615384615385],['f',0.0705128205128205],['g',0.00641025641025641],['h',0.0192307692307692],['i',0.0384615384615385],['j',0.0961538461538462],['k',0.0128205128205128],['l',0.0128205128205128],['m',0.0256410256410256],['n',0.0192307692307692],['o',0.0641025641025641],['p',0.0448717948717949],['q',0.0256410256410256],['r',0.0448717948717949],['s',0.0705128205128205],['t',0.0448717948717949],['u',0.0128205128205128],['v',0.0128205128205128],['w',0.00641025641025641],['x',0.0192307692307692],['y',0.00641025641025641]]
-huffman_code = huffman_encode(symbol_probabilities,R,N)
-ave = aver_code_length(symbol_probabilities,R,N)
-Info_Entropy = Entropy(symbol_probabilities,N,R)
-print(huffman_code,'\n',ave,'\n',Info_Entropy)
+# # 调用函数进行编码
+# Q = "Hello world"
+# N = 1
+# R = 3
+# symbol_probabilities = [['a', 0.3076], ['b', 0.2307], ['c', 0.1538], ['d', 0.1538],['e',0.0769],['f',0.0769]]#,['pad1',0]]
+# #symbol_probabilities = [['a',0.192307692307692],['b',0.0705128205128205],['c',0.0192307692307692],['d',0.0256410256410256],['e',0.0384615384615385],['f',0.0705128205128205],['g',0.00641025641025641],['h',0.0192307692307692],['i',0.0384615384615385],['j',0.0961538461538462],['k',0.0128205128205128],['l',0.0128205128205128],['m',0.0256410256410256],['n',0.0192307692307692],['o',0.0641025641025641],['p',0.0448717948717949],['q',0.0256410256410256],['r',0.0448717948717949],['s',0.0705128205128205],['t',0.0448717948717949],['u',0.0128205128205128],['v',0.0128205128205128],['w',0.00641025641025641],['x',0.0192307692307692],['y',0.00641025641025641]]
+# huffman_code = huffman_encode(symbol_probabilities,R,N)
+# ave = aver_code_length(symbol_probabilities,R,N)
+# Info_Entropy = Entropy(symbol_probabilities,N,R)
+# print(huffman_code,'\n',ave,'\n',Info_Entropy)
 
 
 
-huffman_codes = huffman_encode(symbol_probabilities, R,N)
-#Aver_code_length = aver_code_length(symbol_probabilities,huffman_codes)
-# 打印结果
-if huffman_codes:
-    for symbol, code in huffman_codes.items():
-       print(f"Symbol: {symbol}, Code: {code}")
+# huffman_codes = huffman_encode(symbol_probabilities, R,N)
+# #Aver_code_length = aver_code_length(symbol_probabilities,huffman_codes)
+# # 打印结果
+# if huffman_codes:
+#     for symbol, code in huffman_codes.items():
+#        print(f"Symbol: {symbol}, Code: {code}")
 
 
 
